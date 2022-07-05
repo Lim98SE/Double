@@ -92,7 +92,7 @@ DV IX IV DX CR FF IX DV PV GV DX GV RS
 
 ### Cat Program
 ```
-IX GC CR 00 SX 00 IX PC CJ 00 06
+IX GC CR FF SX 00 IX PC CJ FF 06
 ```
 
 ### Fibonacchi Sequence (by vivax3794)
