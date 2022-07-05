@@ -28,7 +28,7 @@ RS - **R**e**S**tart - Restarts the program.
 
 CR - **C**onditional **R**estart - Restarts the program if the value after the instruction is **not** equal to the cell's value.
 
-GC - **G**et **C**haracter - Gets the charset ID of the character the user inputs. Returns 0 if invalid.
+GC - **G**et **C**haracter - Gets the charset ID of the character the user inputs. Returns 255 if invalid.
 
 GV - **G**et **V**alue - Gets the value of the number the user inputs.
 
