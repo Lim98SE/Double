@@ -65,6 +65,31 @@ SV 27 PC
 DV IX IV DX CR FF IX DV PV GV DX GV RS
 ```
 
+### Cat Program
+```
+GC IX
+GC IX
+GC IX
+GC IX
+GC IX
+GC IX
+GC IX
+GC IX
+GC IX
+GC IX
+SX 00
+PC IX
+PC IX
+PC IX
+PC IX
+PC IX
+PC IX
+PC IX
+PC IX
+PC IX
+PC IX
+```
+
 ## File Format
 Plain-text files storing code can be opened as **.txt** or **.dbl** files.
 
