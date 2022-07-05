@@ -19,6 +19,9 @@ def tokenize_code(code):
     code = code.upper()
     code = code.strip()
     code = code.split()
+    for i in code:
+        if i[0] == "/":
+            code.remove(i)
     for i in range(len(code)):
         if len(code[i])!= 2:
             print("All code should be two characters.")
