@@ -2,7 +2,7 @@ import string
 import sys
 import os
 
-tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18}
+tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19}
 
 charset = ""
 charset+=(string.digits)
@@ -72,7 +72,11 @@ def run_code(code):
             pointer = -1
         elif opcode == 12: # Conditional Restart (CR)
             pointer += 1
-            if data[X][Y] != int(code[pointer], base=16):
+            try:
+                condition = int(code[pointer], base=16)
+            except:
+                condition = data[X][Y]
+            if data[X][Y] != condition:
                 pointer = -1
         elif opcode == 13: # Get Character (GC)
             try:
@@ -91,12 +95,21 @@ def run_code(code):
             data[X][Y] = Y
         elif opcode == 17: # Jump (JM)
             pointer+=1
-            pointer=int(code[pointer], base=16)-1
+            try:
+                pointer=int(code[pointer], base=16)-1
+            except:
+                pointer=data[X][Y]-1
         elif opcode == 18: # Conditional Jump (CJ)
             pointer+=1
-            condition = int(code[pointer], base=16)
+            try:
+                condition = int(code[pointer], base=16)
+            except:
+                condition = data[X][Y]
             pointer+=1
-            location = int(code[pointer], base=16)-1
+            try:
+                location = int(code[pointer], base=16)-1
+            except:
+                location = data[X][Y]-1
             if condition != data[X][Y]:
                 pointer = location
         pointer+=1
