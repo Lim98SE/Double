@@ -76,7 +76,7 @@ def run_code(code):
                 pointer = -1
         elif opcode == 13: # Get Character (GC)
             try:
-                data[X][Y] = charset.index(input("? ")[0])
+                data[X][Y] = charset.index(input("? ")[0].upper())
             except IndexError:
                 data[X][Y] = 0
         elif opcode == 14: # Get Value (GV)
