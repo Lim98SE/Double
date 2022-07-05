@@ -2,7 +2,7 @@ import string
 import sys
 import os
 
-tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16}
+tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18}
 
 charset = ""
 charset+=(string.digits)
@@ -89,6 +89,16 @@ def run_code(code):
             data[X][Y] = X
         elif opcode == 16: # Set Value to Y (YV)
             data[X][Y] = Y
+        elif opcode == 17: # Jump (JM)
+            pointer+=1
+            pointer=int(code[pointer], base=16)-1
+        elif opcode == 18: # Conditional Jump (CJ)
+            pointer+=1
+            condition = int(code[pointer], base=16)
+            pointer+=1
+            location = int(code[pointer], base=16)-1
+            if condition != data[X][Y]:
+                pointer = location
         pointer+=1
     print("")
 
