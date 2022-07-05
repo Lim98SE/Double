@@ -41,7 +41,7 @@ def run_code(code):
     while pointer < len(code):
         opcode = code[pointer]
         if opcode == 0: # Print Value (PV)
-            print(str(data[X][Y]) + "\n")
+            print(hex(data[X][Y])[2:5] + "\n")
         elif opcode == 1: # Print Character (PC)
             print(charset[data[X][Y]%len(charset)],end="")
         elif opcode == 2: # Set X (SX)
