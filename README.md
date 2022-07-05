@@ -38,6 +38,8 @@ YV - **Y** **V**alue - Sets the cell's value to the Y coordinate.
 
 JM - **J**u**M**p - Set the pointer to a location.
 
+CJ - **C**onditional **J**ump - Jumps to the second value if the first value is not the value in the cell.
+
 Two asterisks replace a value with the current value of the cell.
 
 ## Using the Program
