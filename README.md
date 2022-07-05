@@ -115,6 +115,13 @@ PC IX
 PC IX
 ```
 
+### Fibonacchi Sequence (by vivax3794)
+```
+SV 01 IX SV 01 DX
+IY DY DV IX IV IX IV DX DX CJ 00 08
+IX PV IY XV CJ 0B 07
+```
+
 ## File Format
 Plain-text files storing code can be opened as **.txt** or **.dbl** files.
 
