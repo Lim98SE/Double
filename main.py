@@ -85,12 +85,12 @@ def run_code(code):
             try:
                 data[X][Y] = charset.index(input("? ")[0].upper())
             except IndexError:
-                data[X][Y] = 0
+                data[X][Y] = 255
         elif opcode == 14: # Get Value (GV)
             try:
                 data[X][Y] = int(input("? "),base=16)
             except:
-                data[X][Y] = 0
+                data[X][Y] = 255
             data[X][Y] = data[X][Y]%256
         elif opcode == 15: # Set Value to X (XV)
             data[X][Y] = X
