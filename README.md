@@ -36,6 +36,10 @@ XV - **X** **V**alue - Sets the cell's value to the X coordinate.
 
 YV - **Y** **V**alue - Sets the cell's value to the Y coordinate.
 
+JM - **J**u**M**p - Set the pointer to a location.
+
+Two asterisks replace a value with the current value of the cell.
+
 ## Using the Program
 It first starts up in Shell Mode, where you can run code by typing **run** and the code,
 
