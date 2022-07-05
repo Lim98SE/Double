@@ -21,17 +21,43 @@ XV - **X** **V**alue - Sets the cell's value to the X coordinate.
 YV - **Y** **V**alue - Sets the cell's value to the Y coordinate.
 
 ## Using the Program
-It first starts up in Shell Mode, where you can run code by typing **run** and the code, open a file containing code by typing **runfile** and the filename, change your directory by typing **cd** and the directory to change to, and view all files in the directory by typing **dir**.
+It first starts up in Shell Mode, where you can run code by typing **run** and the code,
+open a file containing code by typing **runfile** and the filename,
+change your directory by typing **cd** and the directory to change to,
+and view all files in the directory by typing **dir**.
 
 ## Example Programs
 ### Hello, World!
 ```
-SV 11 PC SV 0E PC SV 15 PC PC SV 18 PC SV 26 PC SV 24 PC SV 20 PC SV 18 PC SV 1B PC SV 15 PC SV 0D PC SV 27 PC
+SV 11 PC
+SV 0E PC
+SV 15 PC PC
+SV 18 PC
+SV 26 PC
+SV 24 PC
+SV 20 PC
+SV 18 PC
+SV 1B PC
+SV 15 PC
+SV 0D PC
+SV 27 PC
 ```
 
-### Hello Interpreter
+### [Hello](https://esolangs.org/wiki/Hello) Interpreter
 ```
-GC CR 11 SV 11 PC SV 0E PC SV 15 PC SV 15 PC SV 18 PC SV 26 PC SV 24 PC SV 20 PC SV 18 PC SV 1B PC SV 15 PC SV 0D PC SV 27 PC
+GC CR 11
+SV 11 PC
+SV 0E PC
+SV 15 PC PC
+SV 18 PC
+SV 26 PC
+SV 24 PC
+SV 20 PC
+SV 18 PC
+SV 1B PC
+SV 15 PC
+SV 0D PC
+SV 27 PC
 ```
 
 ### Adder (created by vivax3794)
