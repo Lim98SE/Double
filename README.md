@@ -42,6 +42,16 @@ JM - **J**u**M**p - Set the pointer to a location.
 
 CJ - **C**onditional **J**ump - Jumps to the second value if the first value is not the value in the cell.
 
+JF - **J**ump **F**orward - Jumps forward a set amount of instructions.
+
+JB - **J**ump **B**ackward - Jumps backward a set amount of instructions.
+
+CF - **C**onditional Jump **F**orward - Jumps forward if a number is not the value in the cell.
+
+CB - **C**onditional Jump **B**ackward - Jumps backward if a number is not the value in the cell.
+
+GS - **G**et **S**tring - Gets a string and stores it across the Y axis.
+
 Two asterisks replace a value with the current value of the cell.
 
 ## Using the Program
