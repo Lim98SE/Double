@@ -2,7 +2,7 @@ import string
 import sys
 import os
 
-tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24}
+tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24,"JR":25,"RR":26,"RC":27,"CB":28}
 
 charset = ""
 charset+=(string.digits)
@@ -24,17 +24,15 @@ def tokenize_code(code):
     for i in range(len(code)):
         if len(code[i])!= 2:
             print("All code should be two characters.")
+            print(i)
             return [0]
         if code[i] in tokens:
             code[i] = tokens[code[i]]
-    if len(code) > int("FF",base=16):
-        print("Length cannot exceed 255.")
-        return[0]
     return code
 
 def run_code(code):
     data = [[0] * 256 for i in range(256)]
-    
+    stack = []
     X, Y, pointer = 0, 0, 0
 
     while pointer < len(code):
@@ -165,6 +163,38 @@ def run_code(code):
                 Y+=1
                 data[X][Y] = i
             Y = py
+        elif opcode == 25: # Jump to Subroutine (JR)
+            pointer+=1
+            try:
+                location = int(code[pointer], base=16)
+            except:
+                location = data[X][Y]
+            stack.append(pointer)
+            pointer = location-1
+        elif opcode == 26: # Return from Subrotine (RR)
+            pointer = stack.pop()
+        elif opcode == 27: # Conditional Jump to Subroutine (RC)
+            pointer+=1
+            try:
+                condition = int(code[pointer],base=16)
+            except:
+                condition = data[X][Y]
+            pointer+=1
+            try:
+                location = int(code[pointer], base=16)
+            except:
+                location = data[X][Y]
+            if data[X][Y] != condition:
+                stack.append(pointer)
+                pointer = location - 1
+        elif opcode == 28: # Conditional Return from Subroutine (CB)
+            pointer+=1
+            try:
+                condition = int(code[pointer],base=16)
+            except:
+                condition = data[X][Y]
+            if data[X][Y] != condition:
+                pointer = stack.pop()
         pointer+=1
 
 while True:
@@ -193,7 +223,7 @@ while True:
             code = tokenize_code(code)
             run_code(code)
         except Exception:
-            print(e)
+            pass
 
 def charset_index_to_char(text):
     output=""
