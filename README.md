@@ -119,3 +119,6 @@ Plain-text files storing code can be opened as **.txt** or **.dbl** files.
 
 ## Licence
 Do whatever you want, as long as you credit me.
+
+## Assembler
+To use the Double Assembler, download it and open Command Prompt. Run `py Assembler.py [input file] [output file]`. You can use Assembly-styled labels in the assembler.
