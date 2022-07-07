@@ -11,6 +11,16 @@ code = code.split()
 
 labels={}
 
+def generateDouble(text):
+    output = ""
+    for i in text:
+        h = hex(ord(i))[2:5]
+        if len(h) == 1:
+            output += f"SV 0{h} PC "
+        else:
+            output += f"SV {h} PC "
+    return output
+
 for i in code:
     if i[len(i)-1] == ":":
         if len(hex(code.index(i))[2:5]) == 1:
@@ -18,6 +28,10 @@ for i in code:
         else:
             labels[i[:len(i)-1]] = hex(code.index(i))[2:5]
         code.pop(code.index(i))
+    if i[0] == "/":
+        code.pop(code.index(i))
+    if i[0] == ".":
+        code[code.index(i)] = generateDouble(i[2:len(i)-1].replace("~", " "))
 
 print(labels)
 
