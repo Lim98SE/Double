@@ -27,9 +27,6 @@ def tokenize_code(code):
             return [0]
         if code[i] in tokens:
             code[i] = tokens[code[i]]
-    if len(code) > int("FF",base=16):
-        print("Length cannot exceed 255.")
-        return[0]
     return code
 
 def run_code(code):
