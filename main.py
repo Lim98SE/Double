@@ -2,7 +2,7 @@ import string
 import sys
 import os
 
-tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24,"JR":25,"RR":26,"RC":27,"CB":28}
+tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24,"JR":25,"RR":26,"RC":27,"BC":28}
 
 charset = ""
 charset+=(string.digits)
@@ -187,7 +187,7 @@ def run_code(code):
             if data[X][Y] != condition:
                 stack.append(pointer)
                 pointer = location - 1
-        elif opcode == 28: # Conditional Return from Subroutine (CB)
+        elif opcode == 28: # Conditional Return from Subroutine (BC)
             pointer+=1
             try:
                 condition = int(code[pointer],base=16)
