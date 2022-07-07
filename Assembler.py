@@ -32,6 +32,15 @@ for i in code:
         code.pop(code.index(i))
     if i[0] == ".":
         code[code.index(i)] = generateDouble(i[2:len(i)-1].replace("~", " "))
+    if "#" in i:
+        char = i[i.find("#")+1]
+        index = code.index(i)
+        h = hex(ord(char))[2:5]
+        if len(h) == 1:
+            i = i.replace(f"#{char}","0"+h)
+        else:
+            i = i.replace(f"#{char}",h)
+        code[index] = i
 
 print(labels)
 
