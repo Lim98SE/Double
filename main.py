@@ -2,14 +2,13 @@ import string
 import sys
 import os
 
-tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19}
+tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23}
 
 charset = ""
 charset+=(string.digits)
 charset+=(string.ascii_uppercase)
 
-special_chars = [" ",".",",","!","?","+","-","*","/","\"","\\","(",")","[","]","{","}","\n"]
-
+special_chars = [" ",".",",","!","?","+","-","*","/","\"","\\","(",")","[","]","{","}",">","<","\n"]
 code = ""
 
 for i in special_chars:
@@ -115,11 +114,51 @@ def run_code(code):
                 location = data[X][Y]-1
             if condition != data[X][Y]:
                 pointer = location
+        elif opcode == 20: # Jump Forward (JF)
+            pointer+=1
+            try:
+                location = int(code[pointer], base=16)
+            except:
+                location = data[X][Y]
+            pointer+=location
+        elif opcode == 21: # Jump Backward (JB)
+            pointer+=1
+            try:
+                location = int(code[pointer], base=16)
+            except:
+                location = data[X][Y]
+            pointer-=location
+        elif opcode == 22: # Conditional Forward (CF)
+            pointer+=1
+            try:
+                condition = int(code[pointer],base=16)
+            except:
+                condition = data[X][Y]
+            pointer+=1
+            try:
+                location = int(code[pointer], base=16)
+            except:
+                location = data[X][Y]
+            if data[X][Y] != condition:
+                pointer+=location
+        elif opcode == 23: # Conditional Forward (CB)
+            pointer+=1
+            try:
+                condition = int(code[pointer],base=16)
+            except:
+                condition = data[X][Y]
+            pointer+=1
+            try:
+                location = int(code[pointer], base=16)
+            except:
+                location = data[X][Y]
+            if data[X][Y] != condition:
+                pointer-=location
         pointer+=1
-    print("")
 
 while True:
     # Shell Mode
+    print("")
     command = input("$ ").lower()
     command=command.split()
     if command[0] == "dir":
