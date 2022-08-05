@@ -54,6 +54,8 @@ GS - **G**et **S**tring - Gets a string and stores it across the Y axis.
 
 RN - **R**andom **N**umber - Generates a number from 0 to FF.
 
+US - **U**pdate **S**creen - Updates the screen.
+
 Two asterisks replace a value with the current value of the cell.
 
 ## Using the Program
