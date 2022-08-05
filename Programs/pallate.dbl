@@ -1,0 +1,7 @@
+/ Show the pallate
+
+IX XV / Increment the X position
+CR 40 / Do a restart if X is not 64 (40 in hex)
+IY    / Increment Y
+SX 00 / Set the X to 0
+RS    / Restart!
