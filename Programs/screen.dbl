@@ -1,0 +1,5 @@
+/ ASSEMBLE THIS FIRST! This is a very simple program...
+
+GS IX RS
+
+/ Basically, it just gets a string and shows the ASCII codes on the screen.
