@@ -65,6 +65,9 @@ change your directory by typing **cd** and the directory to change to,
 
 and view all files in the directory by typing **dir**.
 
+## Using the Screen
+Just download `DoubleVisual.py` and put it in the same directory as `main.py`. The memory range is (0, 0) to (64, 64). The resolution is 64x64 and it has a defined pallate.
+
 ## Example Programs
 ### Hello, World!
 ```
