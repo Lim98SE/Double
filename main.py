@@ -3,7 +3,7 @@ import sys
 import os
 import random
 
-tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24,"JR":25,"RR":26,"RC":27,"BC":28,"RN":29}
+tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24,"JR":25,"RR":26,"RC":27,"BC":28,"RN":29,"US":30}
 
 charset = ""
 charset+=(string.digits)
@@ -200,9 +200,9 @@ def run_code(code):
                 pointer = stack.pop()
         elif opcode == 29: # Random Byte (RN)
             data[X][Y] = random.randint(0, 255)
-
-        if visual:
-            tickScreen(data)
+        elif opcode == 30: # Update Screen (US)
+            if visual:
+                tickScreen(data)
         pointer+=1
 
 if visual:
