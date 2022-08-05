@@ -52,6 +52,8 @@ CB - **C**onditional Jump **B**ackward - Jumps backward if a number is not the v
 
 GS - **G**et **S**tring - Gets a string and stores it across the Y axis.
 
+RN - **R**andom **N**umber - Generates a number from 0 to FF.
+
 Two asterisks replace a value with the current value of the cell.
 
 ## Using the Program
