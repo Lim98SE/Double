@@ -12,6 +12,8 @@ charset+=(string.ascii_uppercase)
 special_chars = [" ",".",",","!","?","+","-","*","/","\"","\\","(",")","[","]","{","}",">","<","\n"]
 code = ""
 
+visual = True
+
 for i in special_chars:
     charset+=i
 
@@ -196,9 +198,16 @@ def run_code(code):
                 condition = data[X][Y]
             if data[X][Y] != condition:
                 pointer = stack.pop()
-        elif opcode == 29: # Random Byte
-            data[X][Y] = random.randint(0, 1)
+        elif opcode == 29: # Random Byte (RN)
+            data[X][Y] = random.randint(0, 255)
+
+        if visual:
+            tickScreen(data)
         pointer+=1
+
+if visual:
+        exec(open("DoubleVisual.py").read())
+        print("Screen is enabled.")
 
 while True:
     # Shell Mode
