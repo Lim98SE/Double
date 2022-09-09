@@ -1,21 +1,28 @@
+# Double v1.6
+# New additions: accumulator, data blocks, better stack operations
+# This is becoming less and less of an esolang every day...
+
 import string
-import sys
-import os
 import random
+import sys
 
-tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24,"JR":25,"RR":26,"RC":27,"BC":28,"RN":29,"US":30}
+try:
+    sys.argv[1]
+except IndexError:
+    print("Please provide arguments.")
 
-charset = ""
-charset+=(string.digits)
-charset+=(string.ascii_uppercase)
+if sys.argv[1] == "-r":
+    code = " ".join(sys.argv[2:])
+elif sys.argv[1] == "-f":
+    try:
+        with open(sys.argv[2]) as file:
+            code = file.read()
+    except:
+        print("File not found/other error occured.")
 
-special_chars = [" ",".",",","!","?","+","-","*","/","\"","\\","(",")","[","]","{","}",">","<","\n"]
-code = ""
+tokens = {"PV":0,"PC":1,"SX":2,"SY":3,"IX":4,"IY":5,"DX":6,"DY":7,"SV":8,"IV":9,"DV":10,"RS":11,"CR":12,"GC":13,"GV":14,"XV":15,"YV":16,"JM":17,"CJ":18,"**":19,"JF":20,"JB":21,"CF":22,"CB":23,"GS":24,"JR":25,"RR":26,"RC":27,"BC":28,"RN":29,"US":30, "DB":31, "PS":32, "+C":33, "-C":34, "IC":35, "DC":36, "SA":37, "AV":38, "PH":39, "PL":40}
 
-visual = True
-
-for i in special_chars:
-    charset+=i
+visual = False
 
 def tokenize_code(code):
     code = code.upper()
@@ -25,10 +32,6 @@ def tokenize_code(code):
         if i[0] == "/":
             code.remove(i)
     for i in range(len(code)):
-        if len(code[i])!= 2:
-            print("All code should be two characters.")
-            print(i)
-            return [0]
         if code[i] in tokens:
             code[i] = tokens[code[i]]
     return code
@@ -37,19 +40,20 @@ def run_code(code):
     data = [[0] * 256 for i in range(256)]
     stack = []
     X, Y, pointer = 0, 0, 0
+    acc = 0 # this too lmao
 
     while pointer < len(code):
         opcode = code[pointer]
         if opcode == 0: # Print Value (PV)
-            print(data[X][Y])
+            print(data[Y][X])
         elif opcode == 1: # Print Character (PC)
-            print(chr(data[X][Y]),end="")
+            print(chr(data[Y][X]),end="")
         elif opcode == 2: # Set X (SX)
             pointer+=1
-            X = int(code[pointer], base=16)
+            X = int(code[pointer])
         elif opcode == 3: # Set Y (SY)
             pointer+=1
-            Y = int(code[pointer], base=16)
+            Y = int(code[pointer])
         elif opcode == 4: # Increment X (IX)
             X+=1
             X = X % 256
@@ -64,114 +68,112 @@ def run_code(code):
             Y = Y % 256
         elif opcode == 8: # Set Value (SV)
             pointer+=1
-            data[X][Y] = int(code[pointer], base=16)
+            data[Y][X] = int(code[pointer])
         elif opcode == 9: # Increment Value (IV)
-            data[X][Y]+=1
-            data[X][Y] = data[X][Y]%256
+            data[Y][X]+=1
         elif opcode == 10: # Decrement Value (DV)
-            data[X][Y]-=1
-            data[X][Y] = data[X][Y]%256
+            data[Y][X]-=1
         elif opcode == 11: # Restart (RS)
             pointer = -1
         elif opcode == 12: # Conditional Restart (CR)
             pointer += 1
             try:
-                condition = int(code[pointer], base=16)
+                condition = int(code[pointer])
             except:
-                condition = data[X][Y]
-            if data[X][Y] != condition:
+                condition = data[Y][X]
+            if data[Y][X] != condition:
                 pointer = -1
         elif opcode == 13: # Get Character (GC)
             try:
-                data[X][Y] = ord(input("? ")[0])
+                data[Y][X] = ord(input("? ")[0])
             except IndexError:
-                data[X][Y] = 255
+                data[Y][X] = 255
         elif opcode == 14: # Get Value (GV)
             try:
-                data[X][Y] = int(input("? "),base=16)
+                data[Y][X] = int(input("? "))
             except:
-                data[X][Y] = 255
-            data[X][Y] = data[X][Y]%256
+                data[Y][X] = 255
+            data[Y][X] = data[Y][X]%256
         elif opcode == 15: # Set Value to X (XV)
-            data[X][Y] = X
+            data[Y][X] = X
         elif opcode == 16: # Set Value to Y (YV)
-            data[X][Y] = Y
+            data[Y][X] = Y
         elif opcode == 17: # Jump (JM)
             pointer+=1
             try:
-                pointer=int(code[pointer], base=16)-1
+                pointer=int(code[pointer])-1
             except:
-                pointer=data[X][Y]-1
+                pointer=data[Y][X]-1
         elif opcode == 18: # Conditional Jump (CJ)
             pointer+=1
             try:
-                condition = int(code[pointer], base=16)
+                condition = int(code[pointer])
             except:
-                condition = data[X][Y]
+                condition = data[Y][X]
             pointer+=1
             try:
-                location = int(code[pointer], base=16)-1
+                location = int(code[pointer])-1
             except:
-                location = data[X][Y]-1
-            if condition != data[X][Y]:
+                location = data[Y][X]-1
+            if condition != data[Y][X]:
                 pointer = location
         elif opcode == 20: # Jump Forward (JF)
             pointer+=1
             try:
-                location = int(code[pointer], base=16)
+                location = int(code[pointer])
             except:
-                location = data[X][Y]
+                location = data[Y][X]
             pointer+=location
         elif opcode == 21: # Jump Backward (JB)
             pointer+=1
             try:
-                location = int(code[pointer], base=16)
+                location = int(code[pointer])
             except:
-                location = data[X][Y]
+                location = data[Y][X]
             pointer-=location
         elif opcode == 22: # Conditional Forward (CF)
             pointer+=1
             try:
-                condition = int(code[pointer],base=16)
+                condition = int(code[pointer])
             except:
-                condition = data[X][Y]
+                condition = data[Y][X]
             pointer+=1
             try:
-                location = int(code[pointer], base=16)
+                location = int(code[pointer])
             except:
-                location = data[X][Y]
-            if data[X][Y] != condition:
+                location = data[Y][X]
+            if data[Y][X] != condition:
                 pointer+=location
         elif opcode == 23: # Conditional Forward (CB)
             pointer+=1
             try:
-                condition = int(code[pointer],base=16)
+                condition = int(code[pointer])
             except:
-                condition = data[X][Y]
+                condition = data[Y][X]
             pointer+=1
             try:
-                location = int(code[pointer], base=16)
+                location = int(code[pointer])
             except:
-                location = data[X][Y]
-            if data[X][Y] != condition:
+                location = data[Y][X]
+            if data[Y][X] != condition:
                 pointer-=location
         elif opcode == 24: # Get String (GS)
             string = input("? ")
-            py = Y
+            px = X
             datacodes = []
             for i in string:
                 datacodes.append(ord(i))
             datacodes.append(255)
             for i in datacodes:
-                Y+=1
-                data[X][Y] = i
-            Y = py
+                X+=1
+                data[Y][X] = i
+            X = px
         elif opcode == 25: # Jump to Subroutine (JR)
             pointer+=1
             try:
-                location = int(code[pointer], base=16)
+                location = int(code[pointer])
             except:
-                location = data[X][Y]
+                location = data[Y][X]
             stack.append(pointer)
             pointer = location-1
         elif opcode == 26: # Return from Subrotine (RR)
@@ -179,67 +181,68 @@ def run_code(code):
         elif opcode == 27: # Conditional Jump to Subroutine (RC)
             pointer+=1
             try:
-                condition = int(code[pointer],base=16)
+                condition = int(code[pointer])
             except:
-                condition = data[X][Y]
+                condition = data[Y][X]
             pointer+=1
             try:
-                location = int(code[pointer], base=16)
+                location = int(code[pointer])
             except:
-                location = data[X][Y]
-            if data[X][Y] != condition:
+                location = data[Y][X]
+            if data[Y][X] != condition:
                 stack.append(pointer)
                 pointer = location - 1
         elif opcode == 28: # Conditional Return from Subroutine (CB)
             pointer+=1
             try:
-                condition = int(code[pointer],base=16)
+                condition = int(code[pointer])
             except:
-                condition = data[X][Y]
-            if data[X][Y] != condition:
+                condition = data[Y][X]
+            if data[Y][X] != condition:
                 pointer = stack.pop()
         elif opcode == 29: # Random Byte (RN)
-            data[X][Y] = random.randint(0, 255)
+            data[Y][X] = random.randint(0, 255)
         elif opcode == 30: # Update Screen (US)
             if visual:
                 tickScreen(data)
+        elif opcode == 31: # Data Block (DB)
+            mp = (Y, X)
+            pointer += 1
+            while int(code[pointer]) != 0xFF:
+                X += 1
+                X = X % 0xFF
+                data[Y][X] = int(code[pointer])
+                pointer += 1
+            Y, X = mp
+        elif opcode == 32: # Print String (PS)
+            mp = (Y, X)
+            X += 1
+            while data[Y][X] != 0xFF:
+                print(chr(data[Y][X]), end="")
+                X += 1
+            Y, X = mp
+        elif opcode == 33: # Add Cell to ACC (+C)
+            acc += data[Y][X]
+        elif opcode == 34: # Subtract Cell from ACC (-C)
+            acc -= data[Y][X]
+        elif opcode == 35: # Increment ACC (IC)
+            acc += 1
+        elif opcode == 36: # Decrement ACC (DC)
+            acc -= 1
+        elif opcode == 37: # Set ACC (SA)
+            pointer += 1
+            acc = int(code[pointer])
+        elif opcode == 38: # Get ACC Value (AV)
+            data[Y][X] = acc
+        elif opcode == 39: # Push Value (PH)
+            stack.append(data[Y][X])
+        elif opcode == 40: # Pull Value (PL)
+            data[Y][X] = stack.pop()
         pointer+=1
 
 if visual:
-        exec(open("DoubleVisual.py").read())
-        print("Screen is enabled.")
+    exec(open("DoubleVisual.py").read())
+    print("Screen is enabled.")
 
-while True:
-    # Shell Mode
-    print("")
-    command = input("$ ").lower()
-    command=command.split()
-    if command[0] == "dir":
-        print(os.getcwd())
-        for x in os.listdir():
-            print(x)
-    if command[0] == "cd":
-        try:
-            os.chdir("".join(command[1:]))
-        except Exception as e:
-            print(e)
-    if command[0] == "run":
-        code = " ".join(command[1:])
-        code = tokenize_code(code)
-        run_code(code)
-    if command[0] == "runfile":
-        try:
-            file = open(" ".join(command[1:]))
-            code = file.read()
-            file.close()
-            code = tokenize_code(code)
-            run_code(code)
-        except Exception:
-            pass
-
-def charset_index_to_char(text):
-    output=""
-    text=text.upper()
-    for i in text:
-        output += f" {hex(charset.index(i))[2:5]} "
-    return output
+code = tokenize_code(code)
+run_code(code)
