@@ -5,19 +5,16 @@ import string
 import random
 import sys
 
+global SIZE_X, SIZE_Y
+SIZE_X, SIZE_Y = 0xFF, 0xFF
+
 try:
     sys.argv[1]
 except IndexError:
     print("Please provide arguments.")
 
-if sys.argv[1] == "-r":
-    code = " ".join(sys.argv[2:])
-elif sys.argv[1] == "-f":
-    try:
-        with open(sys.argv[2]) as file:
-            code = file.read()
-    except:
-        print("File not found/other error occured.")
+with open(" ".join(sys.argv[1:])) as file:
+    code = file.read()
 
 tokens = {"PV": 0, "PC": 1, "SX": 2, "SY": 3, "IX": 4, "IY": 5, "DX": 6, "DY": 7, "SV": 8, "IV": 9, "DV": 10, "RS": 11,
           "CR": 12, "GC": 13, "GV": 14, "XV": 15, "YV": 16, "JM": 17, "CJ": 18, "**": 19, "JF": 20, "JB": 21, "CF": 22,
@@ -73,7 +70,7 @@ def tokenize_code(code):
 
 
 def run_code(code):
-    data = [[0] * 256 for i in range(256)]
+    data = [[0] * SIZE_X for i in range(SIZE_Y)]
     stack = []
     X, Y, pointer = 0, 0, 0
     acc = 0  # this too lmao
@@ -87,21 +84,23 @@ def run_code(code):
         elif opcode == 2:  # Set X (SX)
             pointer += 1
             X = int(code[pointer])
+            X = X % SIZE_X
         elif opcode == 3:  # Set Y (SY)
             pointer += 1
             Y = int(code[pointer])
+            Y = Y % SIZE_Y
         elif opcode == 4:  # Increment X (IX)
             X += 1
-            X = X % 256
+            X = X % SIZE_X
         elif opcode == 5:  # Increment Y (IY)
             Y += 1
-            Y = Y % 256
+            Y = Y % SIZE_Y
         elif opcode == 6:  # Decrement X (DX)
             X -= 1
-            X = X % 256
+            X = X % SIZE_X
         elif opcode == 7:  # Decrement Y (DY)
             Y -= 1
-            Y = Y % 256
+            Y = Y % SIZE_Y
         elif opcode == 8:  # Set Value (SV)
             pointer += 1
             data[Y][X] = int(code[pointer])
